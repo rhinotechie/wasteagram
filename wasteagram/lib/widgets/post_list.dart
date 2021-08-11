@@ -1,6 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+const weekDays = [
+  'placeholder',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+];
+
+const months = [
+  'placeholder',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'December'
+];
+
 class PostList extends StatefulWidget {
   const PostList({Key? key}) : super(key: key);
 
@@ -20,8 +46,14 @@ class _PostListState extends State<PostList> {
                 itemBuilder: (context, index) {
                   var post = snapshot.data!.docs[index];
                   return ListTile(
-                      title: Text(post['date'].toString()),
-                      subtitle: Text(post['quantity'].toString()));
+                      title: Text(
+                          '${weekDays[post['date'].toDate().weekday]}, ' +
+                              '${months[post['date'].toDate().month]} ' +
+                              '${post['date'].toDate().day}, ' +
+                              '${post['date'].toDate().year}'),
+                      trailing: Text(post['quantity'].toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20)));
                 });
           } else {
             return Center(child: CircularProgressIndicator());

@@ -8,7 +8,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Wasteagram',
       theme: ThemeData(brightness: Brightness.dark),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Wasteagram'),
     );
   }
 }
