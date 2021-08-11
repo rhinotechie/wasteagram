@@ -42,15 +42,23 @@ class DetailsScreen extends StatelessWidget {
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
               '${shortWeekDays[post['date'].toDate().weekday]}, ' +
                   '${shortMonths[post['date'].toDate().month]} ' +
                   '${post['date'].toDate().day}, ' +
                   '${post['date'].toDate().year}',
-              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 28),
-            )
+            ),
+            SizedBox(
+              child: Placeholder(),
+              width: 200,
+              height: 200,
+            ),
+            Text('${post['quantity']} items', style: TextStyle(fontSize: 20)),
+            Text('Location: (${post['latitude']}, ${post['longitude']})',
+                style: TextStyle(fontSize: 12))
           ],
         ),
       ),
