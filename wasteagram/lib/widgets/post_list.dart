@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:wasteagram/screens/details_screen.dart';
 
 const weekDays = [
   'placeholder',
@@ -46,18 +47,27 @@ class _PostListState extends State<PostList> {
                 itemBuilder: (context, index) {
                   var post = snapshot.data!.docs[index];
                   return ListTile(
-                      title: Text(
-                          '${weekDays[post['date'].toDate().weekday]}, ' +
-                              '${months[post['date'].toDate().month]} ' +
-                              '${post['date'].toDate().day}, ' +
-                              '${post['date'].toDate().year}'),
-                      trailing: Text(post['quantity'].toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20)));
+                    title: Text('${weekDays[post['date'].toDate().weekday]}, ' +
+                        '${months[post['date'].toDate().month]} ' +
+                        '${post['date'].toDate().day}, ' +
+                        '${post['date'].toDate().year}'),
+                    trailing: Text(post['quantity'].toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20)),
+                    onTap: () {
+                      print('nav to details');
+                      navToDetails(context);
+                    },
+                  );
                 });
           } else {
             return Center(child: CircularProgressIndicator());
           }
         });
+  }
+
+  void navToDetails(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => DetailsScreen()));
   }
 }
