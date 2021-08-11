@@ -56,7 +56,7 @@ class _PostListState extends State<PostList> {
                             fontWeight: FontWeight.bold, fontSize: 20)),
                     onTap: () {
                       print('nav to details');
-                      navToDetails(context);
+                      navToDetails(context, post);
                     },
                   );
                 });
@@ -66,8 +66,8 @@ class _PostListState extends State<PostList> {
         });
   }
 
-  void navToDetails(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => DetailsScreen()));
+  void navToDetails(BuildContext context, var post) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => DetailsScreen(post: post)));
   }
 }
