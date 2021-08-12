@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wasteagram/screens/new_screen.dart';
 import 'widgets/post_list.dart';
 
 class App extends StatelessWidget {
@@ -47,10 +48,17 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(child: PostList()),
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
+        onPressed: () {
+          navToNew(context);
+        },
         child: const Icon(Icons.camera_alt),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  navToNew(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => NewScreen()));
   }
 }

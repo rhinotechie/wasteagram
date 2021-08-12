@@ -55,7 +55,6 @@ class _PostListState extends State<PostList> {
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20)),
                     onTap: () {
-                      print('nav to details');
                       navToDetails(context, post);
                     },
                   );
