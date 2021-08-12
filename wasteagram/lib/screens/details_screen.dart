@@ -34,7 +34,7 @@ class DetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Details'),
+        title: Text('Wasteagram'),
         centerTitle: true,
       ),
       body: Container(
