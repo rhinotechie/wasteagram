@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 const shortWeekDays = [
   'placeholder',
@@ -26,10 +27,15 @@ const shortMonths = [
   'Dec'
 ];
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   final post;
   const DetailsScreen({Key? key, required this.post}) : super(key: key);
 
+  @override
+  _DetailsScreenState createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,23 +51,44 @@ class DetailsScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              '${shortWeekDays[post['date'].toDate().weekday]}, ' +
-                  '${shortMonths[post['date'].toDate().month]} ' +
-                  '${post['date'].toDate().day}, ' +
-                  '${post['date'].toDate().year}',
+              '${shortWeekDays[widget.post['date'].toDate().weekday]}, ' +
+                  '${shortMonths[widget.post['date'].toDate().month]} ' +
+                  '${widget.post['date'].toDate().day}, ' +
+                  '${widget.post['date'].toDate().year}',
               style: TextStyle(fontSize: 28),
             ),
             SizedBox(
-              child: Placeholder(),
-              width: 200,
-              height: 200,
+              child: FutureBuilder<String>(
+                future: downloadPhoto(widget.post['photo']),
+                builder: (context, AsyncSnapshot<String> urlString) {
+                  if (urlString.hasData) {
+                    return Image.network(urlString.data.toString(),
+                        fit: BoxFit.contain);
+                  } else if (urlString.hasError) {
+                    return Container(color: Colors.red);
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              width: double.infinity,
+              height: 300,
             ),
-            Text('${post['quantity']} items', style: TextStyle(fontSize: 20)),
-            Text('Location: (${post['latitude']}, ${post['longitude']})',
+            Text('${widget.post['quantity']} items',
+                style: TextStyle(fontSize: 20)),
+            Text(
+                'Location: (${widget.post['latitude']}, ${widget.post['longitude']})',
                 style: TextStyle(fontSize: 12))
           ],
         ),
       ),
     );
+  }
+
+  Future<String> downloadPhoto(String fileName) async {
+    String photoURL = await firebase_storage.FirebaseStorage.instance
+        .ref(fileName)
+        .getDownloadURL();
+    return photoURL;
   }
 }
