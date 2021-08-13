@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -52,7 +53,7 @@ class _NewScreenState extends State<NewScreen> {
                         labelText: 'Number of Wasted Items',
                         border: UnderlineInputBorder()),
                     onSaved: (value) {
-                      quantity = 11;
+                      quantity = int.parse(value!);
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -112,15 +113,24 @@ class _NewScreenState extends State<NewScreen> {
 
       locationData = await location.getLocation();
 
+      String photoName = DateTime.now().toString() + '.jpg';
+
       // Stores the new screen's data in firestore
       FirebaseFirestore.instance.collection('posts').add({
         'date': DateTime.now(),
         'quantity': quantity,
         'latitude': locationData.latitude.toString(),
         'longitude': locationData.longitude.toString(),
-        'photo': 'cookies.jpg'
+        'photo': photoName
       });
 
+      // Stores the photo in cloud storage
+      Reference photoReference =
+          FirebaseStorage.instance.ref().child(photoName);
+      UploadTask uploadTask = photoReference.putFile(photo!);
+      await uploadTask;
+
+      // Exits the screen
       Navigator.of(context).pop();
     }
   }
