@@ -3,32 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wasteagram/screens/details_screen.dart';
 import 'package:wasteagram/models/post.dart';
 
-const weekDays = [
-  'placeholder',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday'
-];
-
-const months = [
-  'placeholder',
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'December'
-];
-
 class PostList extends StatefulWidget {
   const PostList({Key? key}) : super(key: key);
 
