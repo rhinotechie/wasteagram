@@ -18,6 +18,7 @@ class _NewScreenState extends State<NewScreen> {
   File? photo;
   final photoPicker = ImagePicker();
   int quantity = 0;
+  bool _activeButton = false; // Prevents multiple button presses
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +87,8 @@ class _NewScreenState extends State<NewScreen> {
 
   // Saves photo, location, date, and quantity to database then closes the screen.
   Future onButtonClick() async {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() && _activeButton == false) {
+      _activeButton = true;
       _formKey.currentState!.save(); // Save quantity
 
       // Retrieves location if permission is allowed
@@ -99,6 +101,7 @@ class _NewScreenState extends State<NewScreen> {
       if (!locationEnabled) {
         locationEnabled = await location.requestService();
         if (!locationEnabled) {
+          _activeButton = true;
           return;
         }
       }
@@ -107,6 +110,7 @@ class _NewScreenState extends State<NewScreen> {
       if (allowedLocation == PermissionStatus.denied) {
         allowedLocation = await location.requestPermission();
         if (allowedLocation != PermissionStatus.granted) {
+          _activeButton = true;
           return;
         }
       }
@@ -116,7 +120,7 @@ class _NewScreenState extends State<NewScreen> {
       String photoName = DateTime.now().toString() + '.jpg';
 
       // Stores the new screen's data in firestore
-      FirebaseFirestore.instance.collection('posts').add({
+      await FirebaseFirestore.instance.collection('posts').add({
         'date': DateTime.now(),
         'quantity': quantity,
         'latitude': locationData.latitude.toString(),
