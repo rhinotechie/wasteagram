@@ -18,12 +18,17 @@ class _PostScreenState extends State<PostScreen> {
         centerTitle: true,
       ),
       body: Center(child: PostList()),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          navToNew(context);
-        },
-        child: const Icon(Icons.camera_alt),
-      ),
+      floatingActionButton: Semantics(
+          label: 'Button',
+          child: FloatingActionButton(
+            onPressed: () {
+              navToNew(context);
+            },
+            child: const Icon(Icons.camera_alt),
+          ),
+          button: true,
+          enabled: true,
+          hint: 'Upload photo and create post'),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

@@ -47,23 +47,36 @@ class _PostListState extends State<PostList> {
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   var snapshotPost = snapshot.data!.docs[index];
+
                   Post post = Post(
                       date: snapshotPost['date'].toDate(),
                       quantity: snapshotPost['quantity'],
                       photoURL: snapshotPost['photo'],
                       latitude: snapshotPost['latitude'],
                       longitude: snapshotPost['longitude']);
-                  return ListTile(
-                    title: Text('${post.getWeekday!}, ' +
+
+                  return Semantics(
+                    label: 'Post entry',
+                    hint: 'Opens the details page for ${post.getWeekday!}, ' +
                         '${post.getMonth} ' +
                         '${post.getDay}, ' +
-                        '${post.getYear}'),
-                    trailing: Text('${post.getQuantity}',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20)),
-                    onTap: () {
-                      navToDetails(context, post);
-                    },
+                        '${post.getYear}',
+                    child: ListTile(
+                      title: Text('${post.getWeekday!}, ' +
+                          '${post.getMonth} ' +
+                          '${post.getDay}, ' +
+                          '${post.getYear}'),
+                      trailing: Semantics(
+                        label:
+                            'items left over', // Specifies right number meaning
+                        child: Text('${post.getQuantity}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20)),
+                      ),
+                      onTap: () {
+                        navToDetails(context, post);
+                      },
+                    ),
                   );
                 });
           } else {

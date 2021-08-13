@@ -48,35 +48,46 @@ class _NewScreenState extends State<NewScreen> {
                       width: double.infinity,
                       height: 200,
                       child: Image.file(photo!, fit: BoxFit.contain)),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        labelText: 'Number of Wasted Items',
-                        border: UnderlineInputBorder()),
-                    onSaved: (value) {
-                      quantity = int.parse(value!);
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Item amount can\'t be empty.';
-                      } else {
-                        return null;
-                      }
-                    },
+                  Semantics(
+                    label: 'Text Field',
+                    hint:
+                        'Opens your keyboard to enter number left over food items.',
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          labelText: 'Number of Wasted Items',
+                          border: UnderlineInputBorder()),
+                      onSaved: (value) {
+                        quantity = int.parse(value!);
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Item amount can\'t be empty.';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
                   ),
                   Spacer(),
                   Container(
                     width: double.infinity,
                     height: 100,
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          onButtonClick();
-                        },
-                        child: Icon(
-                          Icons.cloud_upload,
-                          color: Colors.white,
-                          size: 40,
-                        )),
+                    child: Semantics(
+                      label: 'Upload button',
+                      hint: 'Uploads the new post to cloud storage.',
+                      button: true,
+                      enabled: true,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            onButtonClick();
+                          },
+                          child: Icon(
+                            Icons.cloud_upload,
+                            color: Colors.white,
+                            size: 40,
+                          )),
+                    ),
                   )
                 ],
               ),
