@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,6 +16,7 @@ class _NewScreenState extends State<NewScreen> {
   final _formKey = GlobalKey<FormState>();
   File? photo;
   final photoPicker = ImagePicker();
+  int quantity = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,7 @@ class _NewScreenState extends State<NewScreen> {
                         labelText: 'Number of Wasted Items',
                         border: UnderlineInputBorder()),
                     onSaved: (value) {
-                      print('Saved!');
+                      quantity = 11;
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -84,6 +86,9 @@ class _NewScreenState extends State<NewScreen> {
   // Saves photo, location, date, and quantity to database then closes the screen.
   Future onButtonClick() async {
     if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save(); // Save quantity
+
+      // Retrieves location if permission is allowed
       Location location = new Location();
       bool locationEnabled;
       PermissionStatus allowedLocation;
@@ -106,8 +111,15 @@ class _NewScreenState extends State<NewScreen> {
       }
 
       locationData = await location.getLocation();
-      print(
-          '(${locationData.latitude.toString()}, ${locationData.longitude.toString()})');
+
+      // Stores the new screen's data in firestore
+      FirebaseFirestore.instance.collection('posts').add({
+        'date': DateTime.now(),
+        'quantity': quantity,
+        'latitude': locationData.latitude.toString(),
+        'longitude': locationData.longitude.toString(),
+        'photo': 'cookies.jpg'
+      });
 
       Navigator.of(context).pop();
     }
