@@ -67,7 +67,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   } else if (urlString.hasError) {
                     return Container(color: Colors.red);
                   } else {
-                    return CircularProgressIndicator();
+                    return Center(child: CircularProgressIndicator());
                   }
                 },
               ),
