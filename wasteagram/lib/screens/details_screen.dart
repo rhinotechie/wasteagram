@@ -2,32 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:wasteagram/models/post.dart';
 
-const shortWeekDays = [
-  'placeholder',
-  'Mon',
-  'Tues',
-  'Wed',
-  'Thurs',
-  'Fri',
-  'Sat',
-  'Sun'
-];
-
-const shortMonths = [
-  'placeholder',
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'June',
-  'July',
-  'Aug',
-  'Sept',
-  'Oct',
-  'Dec'
-];
-
 class DetailsScreen extends StatefulWidget {
   final Post post;
   const DetailsScreen({Key? key, required this.post}) : super(key: key);
