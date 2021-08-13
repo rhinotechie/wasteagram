@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:location/location.dart';
 import 'dart:io';
 
 class NewScreen extends StatefulWidget {
@@ -64,10 +65,8 @@ class _NewScreenState extends State<NewScreen> {
                     width: double.infinity,
                     height: 100,
                     child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.of(context).pop();
-                          }
+                        onPressed: () async {
+                          onButtonClick();
                         },
                         child: Icon(
                           Icons.cloud_upload,
@@ -79,6 +78,38 @@ class _NewScreenState extends State<NewScreen> {
               ),
             )),
       );
+    }
+  }
+
+  // Saves photo, location, date, and quantity to database then closes the screen.
+  Future onButtonClick() async {
+    if (_formKey.currentState!.validate()) {
+      Location location = new Location();
+      bool locationEnabled;
+      PermissionStatus allowedLocation;
+      LocationData locationData;
+
+      locationEnabled = await location.serviceEnabled();
+      if (!locationEnabled) {
+        locationEnabled = await location.requestService();
+        if (!locationEnabled) {
+          return;
+        }
+      }
+
+      allowedLocation = await location.hasPermission();
+      if (allowedLocation == PermissionStatus.denied) {
+        allowedLocation = await location.requestPermission();
+        if (allowedLocation != PermissionStatus.granted) {
+          return;
+        }
+      }
+
+      locationData = await location.getLocation();
+      print(
+          '(${locationData.latitude.toString()}, ${locationData.longitude.toString()})');
+
+      Navigator.of(context).pop();
     }
   }
 
