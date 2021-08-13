@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:wasteagram/models/post.dart';
 
 const shortWeekDays = [
   'placeholder',
@@ -28,7 +29,7 @@ const shortMonths = [
 ];
 
 class DetailsScreen extends StatefulWidget {
-  final post;
+  final Post post;
   const DetailsScreen({Key? key, required this.post}) : super(key: key);
 
   @override
@@ -51,15 +52,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              '${shortWeekDays[widget.post['date'].toDate().weekday]}, ' +
-                  '${shortMonths[widget.post['date'].toDate().month]} ' +
-                  '${widget.post['date'].toDate().day}, ' +
-                  '${widget.post['date'].toDate().year}',
+              '${widget.post.getWeekday}, ' +
+                  '${widget.post.getMonth} ' +
+                  '${widget.post.getWeekday}, ' +
+                  '${widget.post.getYear}',
               style: TextStyle(fontSize: 28),
             ),
             SizedBox(
               child: FutureBuilder<String>(
-                future: downloadPhoto(widget.post['photo']),
+                future: downloadPhoto(widget.post.getPhoto!),
                 builder: (context, AsyncSnapshot<String> urlString) {
                   if (urlString.hasData) {
                     return Image.network(urlString.data.toString(),
@@ -74,10 +75,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
               width: double.infinity,
               height: 300,
             ),
-            Text('${widget.post['quantity']} items',
+            Text('${widget.post.getQuantity} items',
                 style: TextStyle(fontSize: 20)),
             Text(
-                'Location: (${widget.post['latitude']}, ${widget.post['longitude']})',
+                'Location: (${widget.post.getLatitude}, ${widget.post.getLongitude})',
                 style: TextStyle(fontSize: 12))
           ],
         ),

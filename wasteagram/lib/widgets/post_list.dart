@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wasteagram/screens/details_screen.dart';
+import 'package:wasteagram/models/post.dart';
 
 const weekDays = [
   'placeholder',
@@ -45,13 +46,19 @@ class _PostListState extends State<PostList> {
             return ListView.builder(
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
-                  var post = snapshot.data!.docs[index];
+                  var snapshotPost = snapshot.data!.docs[index];
+                  Post post = Post(
+                      date: snapshotPost['date'].toDate(),
+                      quantity: snapshotPost['quantity'],
+                      photoURL: snapshotPost['photo'],
+                      latitude: snapshotPost['latitude'],
+                      longitude: snapshotPost['longitude']);
                   return ListTile(
-                    title: Text('${weekDays[post['date'].toDate().weekday]}, ' +
-                        '${months[post['date'].toDate().month]} ' +
-                        '${post['date'].toDate().day}, ' +
-                        '${post['date'].toDate().year}'),
-                    trailing: Text(post['quantity'].toString(),
+                    title: Text('${post.getWeekday!}, ' +
+                        '${post.getMonth} ' +
+                        '${post.getDay}, ' +
+                        '${post.getYear}'),
+                    trailing: Text('${post.getQuantity}',
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20)),
                     onTap: () {
